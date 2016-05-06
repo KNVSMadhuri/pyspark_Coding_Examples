@@ -1,0 +1,5 @@
+#Reading multiple Parquet files from a folder and creating Dataframe.
+df = sqlContext.read.parquet('/home/affine/Desktop/Train1/*.parquet')
+# 1.How many hotel cluster are available in data
+df1 = df.select('hotel_cluster').distinct().collect()
+df1
