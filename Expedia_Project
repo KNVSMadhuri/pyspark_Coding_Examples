@@ -32,3 +32,5 @@ df.groupby(['hotel_cluster']).agg(count('*').alias('no. of search queries conver
 subPercent = Percentage.toPandas() 
 subPercent[:20].plot(x='hotel_cluster', y='percentage', kind='barh', alpha=0.5)  
 
+#Find the top 5 hotel cluster having maximum booking
+Percentage.sort('no_of_search_queries_converted', ascending=False).show(5)
