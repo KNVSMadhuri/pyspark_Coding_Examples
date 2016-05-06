@@ -1,12 +1,16 @@
 #Reading multiple Parquet files from a folder and creating Dataframe.
 df = sqlContext.read.parquet('/home/affine/Desktop/Train1/*.parquet')
+
 # 1.How many hotel cluster are available in data
 df1 = df.select('hotel_cluster').distinct().collect()
 df1
+
 #To Print Schema.
 df.printSchema()
+
 #2. How many search destination types are available in  srch_destination_type_id column
 df.groupby('srch_destination_type_id').count().collect()
+
 # 3. Percentage conversion for each hotel cluster using pyspark SQL
 df.registerTempTable("df")
 Percentage_conversion = sqlContext.sql("""
@@ -15,6 +19,7 @@ Percentage_conversion = sqlContext.sql("""
   FROM df
   GROUP BY hotel_cluster""")
 Percentage_conversion.show()
+
 #4. Percentage conversion for each hotel cluster using pyspark Dataframe.
 from pyspark.sql.functions import mean,count,sum
 df.groupby(['hotel_cluster']).agg(count('*').alias('no. of search queries converted')
