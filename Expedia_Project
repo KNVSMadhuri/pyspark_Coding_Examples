@@ -26,6 +26,21 @@ df.groupby(['hotel_cluster']).agg(count('*').alias('no. of search queries conver
                                   ,sum('is_booking').alias('Total search queries')
                                   ,(mean('is_booking') * 100).cast('integer').alias('percentage')) .show()
                                   
+#5. Calculating top 5 elements based on is_booking.
+from pyspark.sql.functions import sum
+distribution_aggregation = df.groupby(['hotel_cluster']).agg(sum('is_booking').alias('is_booking'),
+                                  sum('srch_adults_cnt').alias('srch_adults_cnt'),
+                                 sum('srch_children_cnt').alias('srch_children_cnt'),
+                                 sum('srch_rm_cnt').alias('srch_rm_cnt'),
+                                 sum('orig_destination_distance').alias('orig_destination_distance'),
+                                 sum('site_name').alias('site_name'),
+                                 sum('hotel_market').alias('hotel_market'),
+                                 sum('srch_destination_type_id').alias('srch_destination_type_id'),
+                                 sum('hotel_country').alias('hotel_country'))
+
+                                 
+distribution_aggregation.sort('is_booking', ascending=False).show(5)                                 
+                                  
 #5. Plotting graphs using pyspark
 
 %pylab inline
