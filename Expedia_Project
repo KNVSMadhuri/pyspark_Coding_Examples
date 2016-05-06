@@ -25,3 +25,10 @@ from pyspark.sql.functions import mean,count,sum
 df.groupby(['hotel_cluster']).agg(count('*').alias('no. of search queries converted')
                                   ,sum('is_booking').alias('Total search queries')
                                   ,(mean('is_booking') * 100).cast('integer').alias('percentage')) .show()
+                                  
+#5. Plotting graphs using pyspark
+
+%pylab inline
+subPercent = Percentage.toPandas() 
+subPercent[:20].plot(x='hotel_cluster', y='percentage', kind='barh', alpha=0.5)  
+
