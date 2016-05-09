@@ -49,3 +49,15 @@ subPercent[:20].plot(x='hotel_cluster', y='percentage', kind='barh', alpha=0.5)
 
 #Find the top 5 hotel cluster having maximum booking
 Percentage.sort('no_of_search_queries_converted', ascending=False).show(5)
+
+#5. Calculating top 5 elements based on is_booking.
+from pyspark.sql.functions import sum
+df.filter('hotel_cluster = 91').groupby(['srch_adults_cnt']).agg(sum('is_booking')).show()
+df.filter('hotel_cluster = 91').groupby(['srch_children_cnt']).agg(sum('is_booking')).show()
+df.filter('hotel_cluster = 91').groupby(['srch_rm_cnt']).agg(sum('is_booking')).show()
+df.filter('hotel_cluster = 91').groupby(['orig_destination_distance']).agg(sum('is_booking')).show()
+df.filter('hotel_cluster = 91').groupby(['site_name']).agg(sum('is_booking')).show()
+df.filter('hotel_cluster = 91').groupby(['hotel_market']).agg(sum('is_booking')).show()
+df.filter('hotel_cluster = 91').groupby(['srch_destination_type_id']).agg(sum('is_booking')).show()
+df.filter('hotel_cluster = 91').groupby(['hotel_continent']).agg(sum('is_booking')).show()
+df.filter('hotel_cluster = 91').groupby(['hotel_country']).agg(sum('is_booking')).show()
