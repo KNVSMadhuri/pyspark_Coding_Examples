@@ -1,0 +1,3 @@
+df = sqlContext.read.parquet('/home/affine/Desktop/Expedia_kaggle/train1/part-r-00000-5d750392-b9f9-4390-8791-19c4ec49be4a.gz.parquet')
+sample_df = df.sample(False, 0.1, seed=0)
+sample_parquet = df.write.save("/home/affine/Desktop/Expedia_kaggle/sample.parquet")
