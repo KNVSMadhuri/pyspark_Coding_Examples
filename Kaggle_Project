@@ -35,5 +35,21 @@ df = type_conversion(df)
 from pyspark.ml.feature import StringIndexer
 indexer = StringIndexer(inputCol='srch_adults_cnt', outputCol="categoryIndex")
 indexed = indexer.fit(df).transform(df)
+#create dataframe to categorical variables
+cat_df = df.select('srch_rm_cnt','srch_children_cnt','is_booking','srch_adults_cnt','hotel_continent'
+                   ,'hotel_country','hotel_market')
+
+#converts categorical values to categorical Indices for multiple columns
+from pyspark.ml.feature import StringIndexer
+def indexing(x):
+    for col in x.columns:
+        indexer = StringIndexer(inputCol=col, outputCol=col+'_Index')
+        
+cat_df = indexing(cat_df)
+
+        indexed = indexer.fit(x).transform(x)
+        return indexed 
+
+
 
 
