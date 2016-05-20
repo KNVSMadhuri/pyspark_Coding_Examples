@@ -1,4 +1,25 @@
+#Reading Parquet file
 df = sqlContext.read.parquet('/home/affine/Desktop/Expedia_kaggle/train1/part-r-00000-5d750392-b9f9-4390-8791-19c4ec49be4a.gz.parquet')
 sample_df = df.sample(False, 0.1, seed=0)
+#saving as Parquetfile
 sample_parquet = df.write.save("/home/affine/Desktop/Expedia_kaggle/sample.parquet")
+#writing to Paraquetfile.
+sample_df.write.parquet("/home/affine/Desktop/Expedia_kaggle/sample.parquet")
+#
+sample_df.write.parquet("/home/affine/Desktop/Expedia_kaggle/sample.parquet")
+#selecting columns to convert dataframe columns (list of ) from integer type to double type.
+df = df2.select('site_name','posa_continent','user_location_country','user_location_region','user_location_city',
+               'hotel_cluster','is_booking','srch_adults_cnt','srch_children_cnt','srch_rm_cnt')
+#UDF to convert dataframe columns (list of ) from integer type to double type.
+def type_conversion(x):
+    for col in x.columns:
+        x = x.withColumn(col,x[col].cast(DoubleType()))
+    return x
+#calling function by passing dataframe as argument.
+df = type_conversion(df)
+#creating string Indexer
+#converts categorical values to categorical Indices for single column
 
+from pyspark.ml.feature import StringIndexer
+indexer = StringIndexer(inputCol='srch_adults_cnt', outputCol="categoryIndex")
+indexed = indexer.fit(df).transform(df)
