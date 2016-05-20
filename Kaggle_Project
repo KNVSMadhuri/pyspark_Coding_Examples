@@ -42,14 +42,13 @@ cat_df = df.select('srch_rm_cnt','srch_children_cnt','is_booking','srch_adults_c
 #converts categorical values to categorical Indices for multiple columns
 from pyspark.ml.feature import StringIndexer
 def indexing(x):
+    temp=x
     for col in x.columns:
         indexer = StringIndexer(inputCol=col, outputCol=col+'_Index')
-        
-cat_df = indexing(cat_df)
-
-        indexed = indexer.fit(x).transform(x)
-        return indexed 
-
+        indexed = indexer.fit(temp)
+        temp = indexed.transform(temp)
+    return temp
+cat_df = indexing(cat_df)              
 
 
 
