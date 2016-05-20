@@ -11,6 +11,18 @@ sample_df.write.parquet("/home/affine/Desktop/Expedia_kaggle/sample.parquet")
 df = df2.select('site_name','posa_continent','user_location_country','user_location_region','user_location_city',
                'hotel_cluster','is_booking','srch_adults_cnt','srch_children_cnt','srch_rm_cnt')
 #UDF to convert dataframe columns (list of ) from integer type to double type.
+---------------xxxxx-----------------------------------------
+from pyspark.sql.types import *
+def data_type_change(x):
+    temp = x
+    
+    for col in x.columns:
+        temp = temp.withColumn(col+'_1',x[col].cast(DoubleType())).drop(col).withColumnRenamed(col+'_1',col)
+    
+    return temp
+        
+df2 = data_type_change(df2)
+------------------------xxxxxxxxx----------------------------
 def type_conversion(x):
     for col in x.columns:
         x = x.withColumn(col,x[col].cast(DoubleType()))
@@ -23,3 +35,5 @@ df = type_conversion(df)
 from pyspark.ml.feature import StringIndexer
 indexer = StringIndexer(inputCol='srch_adults_cnt', outputCol="categoryIndex")
 indexed = indexer.fit(df).transform(df)
+
+
