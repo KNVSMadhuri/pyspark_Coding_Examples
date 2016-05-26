@@ -26,6 +26,18 @@ df.groupby(['hotel_cluster']).agg(count('*').alias('no. of search queries conver
                                   ,sum('is_booking').alias('Total search queries')
                                   ,(mean('is_booking') * 100).cast('integer').alias('percentage')) .show()
                                   
+#Working with dictionary elements  
+d = {}
+a=int(input()) 
+for i in range(a): 
+    b = input() 
+    c = b.split(" ") 
+    su = float(c[1]) + float(c[2]) + float(c[3]) 
+    av = float(su/3) 
+    d[c[0]] = av
+    e = input() 
+print ('%.2f' % d[e])
+                                  
 #5. Calculating top 5 elements based on is_booking.
 from pyspark.sql.functions import sum
 distribution_aggregation = df.groupby(['hotel_cluster']).agg(sum('is_booking').alias('is_booking'),
