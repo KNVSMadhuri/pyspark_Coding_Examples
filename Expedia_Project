@@ -73,3 +73,16 @@ df.filter('hotel_cluster = 91').groupby(['hotel_market']).agg(sum('is_booking'))
 df.filter('hotel_cluster = 91').groupby(['srch_destination_type_id']).agg(sum('is_booking')).show()
 df.filter('hotel_cluster = 91').groupby(['hotel_continent']).agg(sum('is_booking')).show()
 df.filter('hotel_cluster = 91').groupby(['hotel_country']).agg(sum('is_booking')).show()
+
+
+#dealing with dictionaries
+d = {}
+a=int(input()) 
+for i in range(a): 
+    b = input() 
+    c = b.split(" ") 
+    su = float(c[1]) + float(c[2]) + float(c[3]) 
+    av = float(su/3) 
+    d[c[0]] = av
+    e = input() 
+print ('%.2f' % d[e])
