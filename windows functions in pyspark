@@ -1,0 +1,10 @@
+from pyspark import HiveContext
+from pyspark.sql.types import *
+#from pyspark.sql import Row, functions as F
+from pyspark.sql.functions import *
+from pyspark.sql.window import Window
+
+df.select("year", "team", "wins","losses", 
+    rowNumber().over(Window.partitionBy("team").orderBy(when(df.team == 'Packers','Packers'))).alias("rowNum")).show()
+    
+    
