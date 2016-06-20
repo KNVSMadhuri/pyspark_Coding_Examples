@@ -1,0 +1,98 @@
+files = ['/home/affine/Desktop/csv_files/employee.csv','/home/affine/Desktop/csv_files/football.csv']
+import os
+import pandas as pd 
+from multiprocessing import Pool
+##multiprocessing or multi threading in python pandas
+
+# wrap your csv importer in a function that can be mapped
+def read_csv(filename):
+    'converts a filename to a pandas dataframe'
+    
+    return pd.read_csv(filename)
+
+
+def main():
+    # set up your pool
+    pool = Pool(processes=8) # or whatever your hardware can support
+
+    # get a list of file names
+    #files = os.listdir('.')
+    file_list = [filename for filename in files if filename.split('.')[1]=='csv']
+    
+
+    # have your pool map the file names to dataframes
+    df_list = pool.map(read_csv, file_list)
+    print(df_list)
+
+    # reduce the list of dataframes to a single dataframe
+    combined_df = pd.concat(df_list, ignore_index=True)
+    print(combined_df)
+
+if __name__ == '__main__':
+    main()
+    
+    
+## using multithreading concept in pyspark
+import _thread
+
+dflist=[]
+
+def f(x):
+    try :
+        dflist.append(sqlContext.read.format("com.databricks.spark.csv").options(header=True).load(x))
+    except:
+        print(x + " not exist")
+
+l = ['/home/affine/Desktop/csv_files/employee.csv', '/home/affine/Desktop/csv_files/testt.csv','/home/affine/Desktop/csv_files/employee.csv']
+
+#for i in l:
+#    _thread.start_new_thread( f, (i,))
+
+i = 0
+while (i < len(l)):
+    _thread.start_new_thread( f, (l[i],))
+  finalDf = sqlContext.createDataFrame(sc.emptyRDD(),dflist[0].schema )
+  print(finalDf)
+  for df in dflist:
+    finalDf = finalDf.unionAll(df)
+    finalDf.show(4)
+    
+## Adding headers to the dataframe
+
+from pyspark.sql.types import StringType
+from pyspark import SQLContext
+sqlContext = SQLContext(sc)
+
+football_rdd = sc.textFile("/home/affine/Desktop/csv_files/football.csv")\
+               .map(lambda line: line.split(','))
+
+football_df = football_rdd.toDF(['year','team','wins','looses'])
+football_df.show()
+
+##splitting a column into different columns
+
+from pyspark.sql.types import StringType, StructType, StructField
+from pyspark.sql import Row
+from pyspark.sql.functions import udf, col
+
+
+def split_date_(s):
+    try:
+        d,m = s.split("-")
+        return d
+    except:
+        return None
+def split_date_1_(s):
+    try:
+        d,m = s.split("-")
+        return m
+    except:
+        return None
+
+split_date = udf(split_date_, StringType())
+split_date1 = udf(split_date_1_, StringType())
+transformed = df.withColumn("wins1", split_date(col("wins"))).withColumn("wins2",split_date1(col("wins")))
+
+transformed.show()
+
+    i+=1
