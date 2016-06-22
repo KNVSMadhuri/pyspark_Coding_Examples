@@ -96,3 +96,18 @@ transformed = df.withColumn("wins1", split_date(col("wins"))).withColumn("wins2"
 transformed.show()
 
     i+=1
+    
+## convert list of dictionaries into dataframe using pyspark.
+
+import json
+ds = [{'a': {'b': {'c': 1}}}]
+ds2 = [json.dumps(item) for item in ds]
+df = sqlCtx.jsonRDD(sc.parallelize(ds2))
+df.printSchema()
+
+## convert list of dictionaries into dataframe using pyspark.
+
+import json
+ds2 = [json.dumps(item) for item in op]
+df = sqlCtx.jsonRDD(sc.parallelize(ds2))
+df.printSchema()
